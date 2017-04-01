@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Main</title>
+</head>
+<body>
+<div class="enter_form_wrapper">
+    <form id="enterForm">
+        <div class="input_wrapper">
+            <p>Login:</p>
+            <input type="text" id="login" name="login" placeholder="Please enter your login" maxlength="15">
+        </div>
+        <div class="input_wrapper">
+            <p>Password:</p>
+            <input type="password" id="password" name="password" placeholder="Please enter your password" maxlength="20">
+        </div>
+        <button type="submit" id="enter">Sign In</button>
+        <button type="button" id="registration">Sign Up</button>
+    </form>
+</div>
+
+<div class="registration_form_wrapper hide">
+    <form id="registrationForm">
+        <div class="input_wrapper">
+            <p><label for="firstName">Enter your name:</label></p>
+            <input type="text" id="firstName" placeholder="Your name">
+        </div>
+        <div class="input_wrapper">
+            <p><label for="lastName">Enter your last name:</label></p>
+            <input type="text" id="lastName" placeholder="Your last name">
+        </div>
+        <div class="input_wrapper">
+            <p><label for="newLogin">Enter your login:</label></p>
+            <input type="text" id="newLogin" placeholder="Your new login">
+        </div>
+        <div class="input_wrapper">
+            <p><label for="email">Enter your email:</label></p>
+            <input type="email" id="email" placeholder="Your email">
+        </div>
+        <div class="input_wrapper">
+            <p><label for="email">Enter your password:</label></p>
+            <input type="password" id="password" placeholder="Your password">
+        </div>
+        <button type="submit" id="saveData">Create an account</button>
+    </form>
+</div>
+
+<table class="hide" id="firstTable">
+    <tr>
+        <th>Наименование</th>
+        <th>Цена</th>
+        <th>Код товара</th>
+    </tr>
+    <tr>
+        <td>Harley Davidson</td>
+        <td>1800$</td>
+        <td>2246</td>
+    </tr>
+    <tr>
+        <td>Honda</td>
+        <td>750$</td>
+        <td>4267</td>
+    </tr>
+</table>
+
+<script src="node_modules/browser-es-module-loader/dist/babel-browser-build.js"></script>
+<script src="node_modules/browser-es-module-loader/dist/browser-es-module-loader.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="script/index.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+.enter_form_wrapper{
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    top: 50px;
+    left: 50px;
+    margin: 20px 20px;
+    padding: 10px 10px;
+    background-color: beige;
+    border: 1px solid black;
+}
+.registration_form_wrapper{
+    position: absolute;
+    width: 200px;
+    height: 500px;
+    top: 50px;
+    left: 50px;
+    margin: 10px 10px;
+    padding: 5px 5px;
+    background-color: beige;
+    border: 1px solid black;
+}
+
+.input_wrapper{
+    display: block;
+    margin: 5px 0 5px 0;
+}
+input{
+    height: 20px;
+}
+
+#enter{
+    position: absolute;
+    margin-top: 10px;
+    right: 38px;
+}
+#registration{
+    position: absolute;
+    margin-top: 10px;
+    right: 98px;
+}
+
+.hide{
+    display: none;
+}
+
+table, th, td{
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 10px 10px;
+    text-align: center;
+}
