@@ -1,0 +1,108 @@
+.enter_form_wrapper{
+    position: absolute;
+    width: 250px;
+    height: 300px;
+    top: 50px;
+    left: 50px;
+    margin: 20px 20px;
+    padding: 10px 10px;
+    /*border: 1px solid black;
+    border-radius: 5px;*/
+}
+.registration_form_wrapper{
+    position: absolute;
+    width: 250px;
+    height: 500px;
+    top: 50px;
+    left: 50px;
+    margin: 10px;
+    padding: 5px 5px;
+    /*border: 1px solid black;
+    border-radius: 5px;*/
+}
+
+.wrap_ToDo{
+    position: absolute;
+    width: 350px;
+    height: 500px;
+    top: 50px;
+    left: 300px;
+    margin: 20px 20px;
+    padding: 10px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+#saveData{
+    margin-top: 10px;
+}
+
+#enter{
+    margin-top: 10px;
+    margin-left: 3px;
+    /*position: relative;
+    left: 77px;*/
+}
+#registration{
+    margin-top: 10px;
+    /*position: relative;
+    left: 77px;*/
+}
+
+.hide{
+    display: none;
+}
+
+table, th, td{
+    border-collapse: collapse;
+    border: 1px solid black;
+    padding: 10px 10px;
+    text-align: center;
+}
+
+#addButton{
+    width: 30px;
+    height: 30px;
+    position: relative;
+    top: 5px;
+    left: 222px
+}
+#addButton:hover{
+    transform: scale(1.2);
+}
+
+.completedBtn{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 290px;;
+}
+
+.removeBtn{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 316px;;
+}
+
+li{
+    height: 20px;
+    font-size: 18px;
+    font-family: Verdana;
+    margin: 5px;
+    padding: 2px;
+}
+input[type = text]{
+    height: 40px;
+
+
+
+
+    font-size: 18px;
+}
+.completed{
+    text-decoration: line-through;
+}
+.funcBtn:hover{
+    transform: scale(1.2);
+}

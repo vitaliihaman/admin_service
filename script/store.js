@@ -1,9 +1,27 @@
 var dataBase = {
     users: [],
-    goods: [],
+    toDos: [],
+
+
+    init: function () {
+        try{
+            this.users = JSON.parse(localStorage.getItem("users")) || [];
+            this.toDos = JSON.parse(localStorage.getItem("toDos")) || [];
+        }catch (error){
+            this.users = [];
+            this.toDos = [];
+        }
+    },
+
     getItem: function (tableName, id) {
         return this[tableName].filter(function (item) {
                 return item.id === id;
+            })[0] || null;
+    },
+
+    getItemByProp: function (tableName, propName, value) {
+        return this[tableName].filter(function (item) {
+                return item[propName] === value;
             })[0] || null;
     },
 
@@ -13,11 +31,13 @@ var dataBase = {
             var user = new User(item);
             this.users.push(user);
         } else {
-            if (tableName === "goods") {
-                var good = new Goods();
-                this.goods.push(good);
+            if (tableName === "toDos") {
+                this.toDos.push(item);
             }
         }
+
+        localStorage.setItem("users", JSON.stringify(this.users));
+        localStorage.setItem("toDos", JSON.stringify(this.toDos));
     },
 
 
@@ -27,15 +47,6 @@ var dataBase = {
                 this[tableName].split(i, 1);
             }
         }
-    },
-
-    person: {
-        firstName: "bobby",
-        lastName: "edison",
-        login: "r_edison",
-        email: "r_edison@mail.ru",
-        password: "edik555",
-        id: "e01b74111f5770"
     }
 };
 
@@ -43,22 +54,24 @@ var dataBase = {
 function User(obj) {
     this.firstName = obj.firstName;
     this.lastName = obj.lastName;
-    this.login = obj.login;
     this.email = obj.email;
     this.password = obj.password;
     this.id = getUniqId();
 }
 
-function Goods() {
-    this.price = 0;
-    this.name = "";
-    this.id = getUniqId();
+function ToDos(obj) {
+
 }
 
 
 function getUniqId() {
     return (Math.random() * Math.pow(10, 17)).toString(16);
 }
+
+
+
+dataBase.init();
+console.log(dataBase);
 
 export default dataBase;
 

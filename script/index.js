@@ -3,8 +3,6 @@
  */
 
 import db from "./store.js";
-//db.addItem("tablename(users или goods)");
-//db.addItem("users", {firstName:"Brokovich"});
 
 
 function Form() {
@@ -12,34 +10,53 @@ function Form() {
     this.init();
 }
 
-Form.prototype = Object.create(Table.prototype);
 
 Form.prototype.init = function () {
-    this.updateHtml();
+
+    // this.updateHtml();
     this.addHandlers();
 };
 
 
-Form.prototype.updateHtml = function () {
-    if(localStorage.getItem("login")){
-        $(".enter_form_wrapper").addClass("hide");
-        table.showTable();
-    }
-};
+/*Form.prototype.updateHtml = function () {
+ if (localStorage.getItem("login")) {
+ $(".enter_form_wrapper").addClass("hide");
+ table.showTable();
+ }
+ };*/
+
 
 Form.prototype.addHandlers = function () {
+    var toDo = new ToDo();
+
     $("#enterForm").on("submit", function (e) {
         e.preventDefault();
 
-        var validator = new ValidatorForm();
-        var login = $("#login").val(),
-            password = $("#password").val();
-        if (validator.check(login, password)) {
+        var validator = new Validator();
+
+        var email = $(this).find("input[name=email]").val(),
+            password = $(this).find("input[name=password]").val(),
+            user = db.getItemByProp("users", "email", email);
+
+        if (user && user.password === password) {
+            console.log("Hi " + user.firstName);
             $(".enter_form_wrapper").addClass("hide");
-            table.showTable();
+            toDo.show(email);
+        } else {
+            console.log("Неверное имя пользователя или пароль");
         }
-        var sUser = JSON.stringify(db.person.password);
-        localStorage.setItem("login", sUser);
+    });
+
+
+
+    $("#addButton").on("click", function () {
+        toDo.add($("#writePlace").val());
+    });
+
+    $("#writePlace").keypress(function (e) {
+        if(e.keyCode === 13 && e.currentTarget.value){
+            toDo.add($("#writePlace").val());
+        }
     });
 
     $("#registration").on("click", function () {
@@ -53,76 +70,172 @@ Form.prototype.addHandlers = function () {
         var currentForm = e.target,
             obj = {};
 
-        for (var i = 0; i < currentForm.length; i++) {
-            var key = currentForm[i].id,
-                value = currentForm[i].value;
-                obj[key] = value;
+        var currEmail = $(this).find("input[id=email]").val(),
+            userByEmail = db.getItemByProp("users", "email", currEmail);
+
+        if (userByEmail) {
+            console.log("Пользователь с таким Email уже зарегистрирован");
+            return;
         }
 
-
-        /*db.addItem("users", obj);
-
-        var serialUsers = JSON.stringify(db.users);
-        localStorage.setItem("users", serialUsers);
-        console.log(db.users[0]);*/
+        for (var i = 0; i < currentForm.length; i++) {
+            if (currentForm[i].id === 'ConfirmPassword' ||
+                currentForm[i].id === 'saveData') continue;
 
 
+            var key = currentForm[i].id,
+                value = currentForm[i].value;
 
-    });
+            var validator = new Validator();
+            var check = false;
 
+            rules[key].forEach(function (rule) {
+
+                var type = rule.type || rule;
+                if (typeof rule === "object") {
+                    var args = [].concat(value, rule.args);
+                    check = validator[type].apply(null, args);
+                } else {
+                    check = validator[type](value);
+                }
+                if (!check) {
+                    console.log("Ошибка " + type + " в поле " + key);
+                }
+
+            });
+
+            if (check) {
+                obj[key] = value;
+            }
+
+        }
+
+        if (obj) {
+            db.addItem("users", obj);
+        }
+    }); // регистрация пользователя
 };
 
-//console.log(JSON.parse(localStorage.getItem("users")));
+//console.log(!!Object.keys({a: 1, b: 2, c: 3}).length); Проверка на ключи
 
-
-function Table() {
-    this.owner = {};
+function ToDo() {
+    this.owner = '';
     this.data = {}
 }
 
-Table.prototype.showTable = function () {
-    var tbl = $("#firstTable");
-    tbl.removeClass("hide");
+ToDo.prototype.show = function (email) {
+    console.log(this);
+    this.owner = email;
+    $("#toDo_wrapper").removeClass("hide");
+};
 
+ToDo.prototype.add = function (value) {
+    var self = this;
+    if (value) {
+        var ul = $("#my-todo"),
+            li = $("<li/>");
+        li.text(value);
+
+        $(li).on("click", function (e) {
+            if (e.target.classList.contains('funcBtn')) {
+                var operation = e.target.getAttribute('data-target');
+                if (operation === 'completed') {
+                    self.completed(e.currentTarget);
+                } else {
+                    this.remove();
+                }
+            }
+        });
+        ul.append(li);
+        this.addButtonCompleted(li);
+        this.addButtonRemoved(li);
+        self.data[ul] = ul;
+        console.log(self);
+
+        db.addItem("toDos", self);
+        $("#writePlace").val("");
+
+       // console.log(self.data);
+    }
+};
+
+
+ToDo.prototype.completed = function (el) {
+$(el).toggleClass("completed");
+};
+
+ToDo.prototype.refactor = function () {
 
 };
 
-Table.prototype.add = function () {
-
+ToDo.prototype.addButtonCompleted = function (li) {
+    var complBtn = $("<input/>").attr("type", 'image').attr("data-target", "completed").attr("src", "assets/image/tick.png").addClass("completedBtn funcBtn");
+    li.append(complBtn);
 };
 
-Table.prototype.remove = function () {
-
+ToDo.prototype.addButtonRemoved = function (li) {
+    var removeBtn = $("<input/>").attr("type", 'image').attr("src", "assets/image/delete.png").attr("data-target", "remove").addClass("removeBtn funcBtn");
+    li.append(removeBtn);
 };
 
-Table.prototype.refactor = function () {
 
+var rules = {
+    firstName: ['required', {type: 'length', args: [2, 15]}],
+    lastName: ['required', {type: 'length', args: [2, 15]}],
+    password: ['required', {type: 'length', args: [6, 15]}],
+    confirmPassword: ['required', {type: 'length', args: [6, 15]}],
+    email: ['required']
 };
+
 
 
 function Validator() {
 
 }
 
-function ValidatorForm() {
-    Validator.apply(this, arguments);
-}
-
-ValidatorForm.prototype = Object.create(Validator.prototype);
-
-Validator.prototype.message = function () {
-    console.log("из прототипа Validator");
+Validator.prototype.required = function (value) {
+    return !!value;
 };
 
-Validator.prototype.check = function (login, password) {
-    if(db.person.login === login && db.person.password === password){
-        return true;
-    }
+Validator.prototype.length = function (value, from, to) {
+    return from <= value.length && value.length <= to;
+};
+
+Validator.prototype.isEqual = function (val,) {
+
 };
 
 
-var createForm = new Form(),
-    table = new Table();
+var createForm = new Form();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
