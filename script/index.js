@@ -112,6 +112,9 @@ Form.prototype.addHandlers = function () {
 
         if (obj) {
             db.addItem("users", obj);
+
+            $(".registration_form_wrapper").addClass("hide");
+            $("#toDo_wrapper").removeClass("hide");
         }
     }); // регистрация пользователя
 };
